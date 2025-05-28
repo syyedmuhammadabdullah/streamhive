@@ -1,0 +1,20 @@
+{
+  "name": "streamhive",
+  "version": "1.0.0",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+  "build": "tsc",
+  "start": "node dist/index.js"
+
+  },
+  "author": "Syed Muhammad Abdullah",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.15.22",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
