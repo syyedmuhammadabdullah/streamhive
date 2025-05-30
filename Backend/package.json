@@ -1,10 +1,10 @@
 {
   "name": "streamhive",
   "version": "1.0.0",
-  "main": "app.ts",
+  "main": "script.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/script.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
