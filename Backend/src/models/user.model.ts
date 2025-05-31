@@ -11,7 +11,7 @@ export interface IUser extends Document {
   userSession?: Array<any>; // Adjust type as needed for user sessions
 }
 
-const SessionSchema = new Schema({
+const sessionSchema = new Schema({
   sessionId: {
     type: String,
     required: true,
@@ -20,7 +20,7 @@ const SessionSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    device: {
+    os: {
         type: String,
         required: true,
     },
@@ -67,7 +67,7 @@ const userSchema = new Schema<IUser>({
     coverImage: {
         type: String,
     },
-    userSession: []
+    userSession: [sessionSchema], // Array of sessions for the user
 }, {
   timestamps: true,
 });
@@ -95,7 +95,7 @@ userSchema.methods.generateAuthToken = function (sessionId : string): string {
     email: this.email,
     sessionId: sessionId, 
   };
-  const secretKey = process.env.JWT_SECRET || "your_jwt_secret"; // Use your secret key
+  const secretKey = process.env.JWT_AUTH_SECRET || "your_jwt_secret"; // Use your secret key
   const options = { expiresIn: "1d" }; // Token expiration time
 
   return jwt.sign(payload, secretKey, options);

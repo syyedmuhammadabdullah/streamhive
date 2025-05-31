@@ -1,6 +1,6 @@
 import {Schema, model} from "mongoose";
 
-export interface IVideo {
+export interface IVideo extends Document {
   title: string;
   description: string;
   videoUrl: string;

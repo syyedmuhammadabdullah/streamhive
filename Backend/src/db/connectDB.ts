@@ -1,4 +1,4 @@
-import {dbName,app} from "../index";
+import { dbName } from "../constant";
 import mongoose from "mongoose";
 
 const connectDB = async () => {

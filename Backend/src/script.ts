@@ -1,5 +1,6 @@
-import {connectDB,app} from "./index";
 
+import {app} from "./app";
+import connectDB from "./db/connectDB";
 
 // Connect to the database
 connectDB().then(() => {

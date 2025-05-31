@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 const apiHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
-    const errors= err.errors || [];
+    const error= err.error
     const errorResponse = {
         status: 'error',
         statusCode,
         message,
-        errors,
+        error,
     };
     res.status(statusCode).json(errorResponse);
     console.error(`Error: ${message}`, err);

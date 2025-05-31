@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose';
 
-export interface IComment {
+export interface IComment extends Document {	
     content: string;
     userId: Schema.Types.ObjectId; // Reference to UserModel
     videoId: Schema.Types.ObjectId; // Reference to VideoModel

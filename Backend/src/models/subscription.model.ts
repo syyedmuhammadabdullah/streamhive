@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose';
 
-export interface ISubscription {
+export interface ISubscription extends Document {
     userId: Schema.Types.ObjectId; // Reference to UserModel
     channelId: Schema.Types.ObjectId; // Reference to UserModel (the channel being subscribed to)
     

@@ -1,7 +1,8 @@
 class ApiError<T> extends Error {
   statusCode: number;
     message: string;
-    error?: T;
+    error?: string | T; // Error details can be a string or a generic type
+  stack?: string; // Optional stack trace for the error
     /**
      * Custom error class for API errors.
      * @param {string} message - The error message.
@@ -10,7 +11,7 @@ class ApiError<T> extends Error {
      * @param {string} [stack] - Optional stack trace for the error.
      */
 
-  constructor(message: string, statusCode: number,error?:T,stack?: string) {
+  constructor(message: string, statusCode: number,error?: string | T,stack?: string) {
     super(message);
     this.statusCode = statusCode;
     this.message = message; // Set the error message
