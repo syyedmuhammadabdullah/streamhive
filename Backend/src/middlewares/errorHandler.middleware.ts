@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-const apiHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+const apiHandlerMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
     const error= err.error
@@ -13,5 +13,5 @@ const apiHandler = (err: any, req: Request, res: Response, next: NextFunction) =
     console.error(`Error: ${message}`, err);
 }
 // Export the error handler middleware
-export default apiHandler;
+export default apiHandlerMiddleware;
 // This middleware handles errors in the Express application.

@@ -1,7 +1,7 @@
-import {ApiError,ApiResponse,getDeviceInfo,generateTokens} from "../../utlis"
+import {ApiError,ApiResponse,getDeviceInfo,generateTokens,options} from "../../utlis"
 import {Request, Response} from "express";
 import { UserModel } from "../../models";
-import registerUserSchema from "../../zod/user.register.validation";
+import registerUserSchema from "../../validation/user.register.validation";
 import crypto from "crypto";
 
 
@@ -36,10 +36,7 @@ const userRegisterController = async (req: Request, res: Response) => {
         userAgent: deviceInfo.ua,
         createdAt: new Date(),
     }
-    if (!user.userSession) {
-        // If userSession is not initialized, initialize it as an empty array
-    user.userSession=[];
-    }
+  
     // Add the session to the user's session array
     user.userSession.push(userSession);
     // user.generateAuthToken 
@@ -49,20 +46,17 @@ const userRegisterController = async (req: Request, res: Response) => {
         throw new ApiError("Internal server error", 500, "Failed to save user session");
     });
     const response = new ApiResponse('User registered successfully',user,200);
-    const { authToken, refreshToken } = await generateTokens(user, sessionId);
+    const { authToken, refreshToken, sessionCleanupToken } = await generateTokens(user, sessionId);
     res.status(200)
     .cookie("authToken", authToken, {
-        httpOnly: false, // Set to true if you want to prevent client-side access
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+        ...options,
+        maxAge: 24* 60*60 * 1000, // 1 day in milliseconds
     })
     .cookie("refreshToken", refreshToken, {
-        httpOnly: false, // Set to true if you want to prevent client-side access
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+        ...options,
+        maxAge: 24*7* 60 * 60 * 1000, // 7 days in milliseconds
     })
+    .cookie("sessionCleanupToken", sessionCleanupToken, {...options})
     .json(response);
 }
 

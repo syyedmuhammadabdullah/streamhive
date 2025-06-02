@@ -1,3 +1,4 @@
-import apiHandler from "./errorHandler";
+import apiHandlerMiddleware from "./errorHandler.middleware";
+import authMiddleware from "./auth.middleware";
 
-export { apiHandler };
+export { apiHandlerMiddleware, authMiddleware };

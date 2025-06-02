@@ -8,7 +8,11 @@ export interface IUser extends Document {
   lastName: string;
   avatar?: string;
   coverImage?: string;
-  userSession?: Array<any>; // Adjust type as needed for user sessions
+  userSession: Array<any>; // Adjust type as needed for user sessions
+  comparePassword(candidatePassword: string): Promise<boolean>;
+  generateAuthToken(sessionId: string): string;
+  generateRefreshToken(sessionId: string): string;
+  generateSessionCleanupToken(sessionId: string): string;
 }
 
 const sessionSchema = new Schema({
@@ -42,7 +46,6 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
     minlength: 6,
-    select: false, // Exclude password from queries by default
   },
   email: {
     type: String,
@@ -95,8 +98,8 @@ userSchema.methods.generateAuthToken = function (sessionId : string): string {
     email: this.email,
     sessionId: sessionId, 
   };
-  const secretKey = process.env.JWT_AUTH_SECRET || "your_jwt_secret"; // Use your secret key
-  const options = { expiresIn: "1d" }; // Token expiration time
+  const secretKey = process.env.JWT_AUTH_SECRET!; // Use your secret key
+  const options: jwt.SignOptions = { expiresIn: "1d" }; // Token expiration time
 
   return jwt.sign(payload, secretKey, options);
 };
@@ -108,9 +111,21 @@ userSchema.methods.generateRefreshToken = function (sessionId : string): string 
     email: this.email,
     sessionId: sessionId, 
   };
+  
   const secretKey = process.env.JWT_REFRESH_SECRET || "your_jwt_refresh_secret"; // Use your refresh secret key
-  const options = { expiresIn: "7d" }; // Refresh token expiration time
+  const options: jwt.SignOptions = { expiresIn:"7d" }; // Refresh token expiration time
     return jwt.sign(payload, secretKey, options);
 };
+
+userSchema.methods.generateSessionCleanupToken = function (sessionId: string): string {
+    // Implement session cleanup logic here
+    const payload = {
+        id: this._id,
+        sessionId: sessionId,
+    };
+    const secretKey = process.env.JWT_SESSION_CLEANUP_SECRET!; // Use your session cleanup secret key
+    // No expiration for session cleanup token
+    return jwt.sign(payload, secretKey, );
+  };
 
 export const UserModel = model<IUser>("UserModel", userSchema);

@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.18",
     "@types/jsonwebtoken": "^9.0.9",
@@ -32,6 +33,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "multer": "^2.0.0",
+    "node-cron": "^4.1.0",
     "prettier": "^3.5.3",
     "ua-parser-js": "^2.0.3",
     "zod": "^3.25.32"

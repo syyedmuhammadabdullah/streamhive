@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import { apiHandler } from './middlewares';
+import { apiHandlerMiddleware } from './middlewares';
 
 
 // Load environment variables from .env file
@@ -39,5 +39,5 @@ app.use('/api/videos', videoRouter);
 app.use('/api/subscriptions', subscriptionRouter);
 
 
-app.use(apiHandler);
+app.use(apiHandlerMiddleware);
 export {app};

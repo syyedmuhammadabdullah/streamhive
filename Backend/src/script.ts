@@ -1,6 +1,7 @@
 
 import {app} from "./app";
 import connectDB from "./db/connectDB";
+import "./cron/user.session.cleanup.cron"; // Import the cron job for user session cleanup
 
 // Connect to the database
 connectDB().then(() => {

@@ -8,3 +8,7 @@ const userRegisterSchema = z.object({
 });
 
 export default userRegisterSchema;
+
+
+// optional if you want to use it for type checking
+// export type UserRegisterType = z.infer<typeof userRegisterSchema>; 
