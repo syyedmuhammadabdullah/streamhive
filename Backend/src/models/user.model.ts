@@ -9,6 +9,11 @@ export interface IUser extends Document {
   avatar?: string;
   coverImage?: string;
   userSession: Array<any>; // Adjust type as needed for user sessions
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+  is2faEnabled?: boolean;
+  totpSecret?: string; // Field for storing TOTP secret if 2FA is enabled
+  
   comparePassword(candidatePassword: string): Promise<boolean>;
   generateAuthToken(sessionId: string): string;
   generateRefreshToken(sessionId: string): string;
@@ -36,7 +41,6 @@ const sessionSchema = new Schema({
         type: String,
         required: true,
     },
-
     // Add any other fields related to user sessions as needed
 });
 
@@ -70,6 +74,21 @@ const userSchema = new Schema<IUser>({
     coverImage: {
         type: String,
     },
+    passwordResetToken: {
+        type: String,
+    },
+  passwordResetExpires: {
+    type: Date,
+  },
+  is2faEnabled: {
+    type: Boolean,
+    default: false, // Default to false, can be set to true when 2FA is enabled
+  },
+  totpSecret: {
+    type: String,
+    // This field will store the TOTP secret if 2FA is enabled
+  },
+  // Add any other fields related to user profile as needed
     userSession: [sessionSchema], // Array of sessions for the user
 }, {
   timestamps: true,
@@ -124,6 +143,30 @@ userSchema.methods.generateSessionCleanupToken = function (sessionId: string): s
         sessionId: sessionId,
     };
     const secretKey = process.env.JWT_SESSION_CLEANUP_SECRET!; // Use your session cleanup secret key
+    // No expiration for session cleanup token
+    return jwt.sign(payload, secretKey, );
+  };
+userSchema.methods.generatePasswordResetToken = function (passwordResetFlow: string): string {
+    // Implement session cleanup logic here
+    const payload = {
+        id: this._id,
+        email: this.email,
+       action: passwordResetFlow, // Add any additional data needed for password reset
+    };
+    const secretKey = process.env.Jwt_PASSWORD_RESET_SECRET!; // Use your session cleanup secret key
+    // No expiration for session cleanup token
+    return jwt.sign(payload, secretKey, );
+  };
+userSchema.methods.generate2faVerificationToken = function (verificationFLow: string): string {
+    // Implement session cleanup logic here
+    const payload = {
+        id: this._id,
+        is2faEnabled: this.is2faEnabled,
+        email: this.email,
+        action: verificationFLow, // Add any additional data needed for 2FA verification
+
+    };
+    const secretKey = process.env.JWT_2FA_SECRET!; // Use your session cleanup secret key
     // No expiration for session cleanup token
     return jwt.sign(payload, secretKey, );
   };

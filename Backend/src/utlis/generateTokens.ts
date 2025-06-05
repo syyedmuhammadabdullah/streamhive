@@ -13,11 +13,17 @@ const generateTokens=async (user:any, sessionId:string) => {
     const refreshToken = user.generateRefreshToken(sessionId);
     // Generate session cleanup token
     const sessionCleanupToken = user.generateSessionCleanupToken(sessionId);
+    // password reset token
+    const passwordResetToken = user.generatePasswordResetToken(sessionId);
+    // 2fa verification token
+    const twoFaVerificationToken = user.generate2faVerificationToken(sessionId);
 
     return {
         authToken,
         refreshToken,
-        sessionCleanupToken
+        sessionCleanupToken,
+        passwordResetToken,
+        twoFaVerificationToken
     };
 }
 // Define options for cookies
@@ -79,10 +85,10 @@ if (!user) {
     // Set new tokens in cookies
     res.cookie("authToken", authToken,{
        ...options,
-        maxAge:1* 60 * 1000, // 1 day in milliseconds
+        maxAge:60*24* 60 * 1000, // 1 day in milliseconds
     }).cookie("refreshToken", refreshToken, {
        ...options,
-       maxAge: 1* 2 * 60 * 1000, // 7 day in milliseconds
+       maxAge: 60*7* 24 * 60 * 1000, // 7 day in milliseconds
     })
     .cookie("sessionCleanupToken", sessionCleanupToken, {...options});
 

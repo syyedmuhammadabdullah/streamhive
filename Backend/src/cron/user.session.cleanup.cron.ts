@@ -4,8 +4,8 @@ import { UserModel } from "../models";
     cron.schedule("*/4 * * * *", async () => {
     console.log("Running user session cleanup task...");
 
-    // const date=new Date(Date.now() - 1000 * 60 * 60 * 24 * 30); // 30 days ago
-    const date=new Date(Date.now() - 1000 * 60 * 5);
+    const date=new Date(Date.now() - 1000 * 60 * 60 * 24 * 30); // 30 days ago
+    // const date=new Date(Date.now() - 1000 * 60 * 5);
     // Find users with sessions and remove the first session
        await UserModel.updateMany(
       {},

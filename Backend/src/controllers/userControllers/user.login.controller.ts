@@ -27,6 +27,13 @@ const userLoginController = async (req: Request, res: Response) => {
     if (!isPasswordValid) {
         throw new ApiError("Invalid credentials", 401, "The password is incorrect");
     }
+    // If the user has 2FA enabled, check if it is verified
+    if (user.is2faEnabled) {
+        const {twoFaVerificationToken} = await generateTokens(user, "login step completed");
+       res.status(200)
+       .cookie("twoFaVerificationToken", twoFaVerificationToken, {...options,maxAge: 5 * 60 * 1000})
+       .json(new ApiResponse("Two-factor authentication is enabled for this user. Please verify your OTP.", null, 200));
+    }
     const sessionId = crypto.randomBytes(16).toString('hex'); // Generate a random session ID
     // Create a session object with the device information
     const userSession={
@@ -49,11 +56,11 @@ const userLoginController = async (req: Request, res: Response) => {
     res.status(200)
     .cookie("authToken", authToken, {
         ...options,
-        maxAge: 0.5 * 60 * 1000, // 1 day in milliseconds
+        maxAge:24 * 60 * 60 * 1000, // 1 day in milliseconds
     })
     .cookie("refreshToken", refreshToken, {
         ...options,
-        maxAge: 1 * 60 * 1000, // 1 day in milliseconds
+        maxAge:7*24* 60 * 60 * 1000, // 7 day in milliseconds
     })
     .cookie("sessionCleanupToken", sessionCleanupToken, {...options})
     .json(new ApiResponse('Login successful', user, 200));

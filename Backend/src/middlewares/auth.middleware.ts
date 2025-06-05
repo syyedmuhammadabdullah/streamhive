@@ -33,6 +33,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
    const user= await UserModel.findById(decoded.id).catch((error) => {
         throw new ApiError("Failed to find user", 500, `Error: ${error.message}`);
     });
+    
     if(!user){
         throw new ApiError("User not found", 404, "The user does not exist");
     }
@@ -40,6 +41,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     if(!session){
         throw new ApiError("Session not found", 404, "The session associated with the auth token does not exist");
     }
+    req.user = user;
     // Proceed to the next middleware or route handler
     next();
 }
