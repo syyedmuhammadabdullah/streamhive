@@ -1,9 +1,8 @@
 import cron,{ NodeCron } from "node-cron";
 import { UserModel } from "../models";
 
-    cron.schedule("*/4 * * * *", async () => {
-    console.log("Running user session cleanup task...");
-
+    cron.schedule("* 2 * * *", async () => {
+      
     const date=new Date(Date.now() - 1000 * 60 * 60 * 24 * 30); // 30 days ago
     // const date=new Date(Date.now() - 1000 * 60 * 5);
     // Find users with sessions and remove the first session
@@ -17,6 +16,4 @@ import { UserModel } from "../models";
         }
       }
     );
-        console.log("User sessions cleaned up successfully.");
-  
 });

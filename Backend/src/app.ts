@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { apiHandlerMiddleware } from './middlewares';
+import path from 'path';
 
 
 // Load environment variables from .env file
@@ -21,8 +22,8 @@ app.use(express.json());
 app.use(cookieParser());
 // Middleware to parse URL-encoded data
 app.use(express.urlencoded({extended: true}));
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
+// Serve static files from the 'processed' directory
+app.use('/processed', express.static(path.join(__dirname,"..", 'processed')))
 
 // Import routes
 import testRouter from './routes/test.route';

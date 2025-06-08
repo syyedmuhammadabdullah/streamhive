@@ -4,11 +4,14 @@ import getDeviceInfo from "./getDeviceInfo";
 import { updateAuthToken, generateTokens, options } from "./generateTokens";
 import { verifyJwt } from "./verify.jwt";
 import sessionCleanup from "./session.cleanup";
+import createVideoFolder from "./create.video.folder.utlis";
+import processVideo from "./process.video.utlis";
 import {
   verifyTOTP,
   generateSecret,
   generateQRCode,
   generateTOTP,
+  
 } from "./totp.utlis";
 
 export {
@@ -24,4 +27,7 @@ export {
     generateSecret,
     generateQRCode, 
     generateTOTP,
+    createVideoFolder,
+    processVideo,
+ 
 };
