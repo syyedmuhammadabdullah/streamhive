@@ -5,6 +5,7 @@ export interface IVideo extends Document {
   description: string;
   videoUrl: string;
   thumbnailUrl: string;
+  videoFolderId: string;
   userId: Schema.Types.ObjectId; // Reference to UserModel
   likes?: number;
   dislikes?: number;
@@ -31,6 +32,11 @@ const videoSchema = new Schema<IVideo>({
     trim: true,
   },
   thumbnailUrl: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  videoFolderId: {
     type: String,
     required: true,
     trim: true,

@@ -13,7 +13,7 @@ testRouter.post('/test', uploadMiddleware.single('video'), async(req: Request, r
     }
     const fileName=req.file.originalname
     const time= new Date().toISOString()
-   const { videoFolder, videoQualityFolder}= createVideoFolder(fileName,time);
+   const { videoQualityFolder}= createVideoFolder(fileName,time);
    
 
    const inputPath=req.file.path

@@ -8,6 +8,7 @@ interface ProcessOptions {
   inputPath: string;
   outputDir: string;
   fileNameWithoutExt: string;
+  newThumbnailPath: string;
 }
 
 const resolutions = [
@@ -43,6 +44,9 @@ const runFFmpeg = (inputPath: string, outputDir: string, fileName: string, res: 
       outputPath
     ]);
 
+    ffmpeg.stderr.on("data", (data) => {
+      console.log(`FFmpeg stderr: ${data}`);
+    });
 
     ffmpeg.on("close", (code) => {
       if (code === 0) {
@@ -79,8 +83,12 @@ const getVideoHeight=(inputPath: string): Promise<number> => {
   });
 }
 
-const createThumbnail = (inputPath: string, outputDir: string): Promise<string> => {
+const createThumbnail = (inputPath: string, outputDir: string, newThumbnailPath: string): Promise<string> => {
   return new Promise((resolve, reject) => {
+    if (newThumbnailPath!=="") {
+      fs.renameSync(newThumbnailPath, path.join(outputDir, 'thumb.jpg'));
+      return resolve(path.join(outputDir, 'thumb.jpg'));
+    }
     ffmpeg(inputPath)
       .on('end', () => {
         resolve(path.join(outputDir, 'thumb.jpg'));
@@ -95,7 +103,8 @@ const createThumbnail = (inputPath: string, outputDir: string): Promise<string> 
   });
 };
 
-const processVideo = async ({ inputPath, outputDir, fileNameWithoutExt }: ProcessOptions) => {
+const processVideo = async ({ inputPath, outputDir, fileNameWithoutExt,newThumbnailPath }: ProcessOptions) => {
+  
   const inputHeight = await getVideoHeight(inputPath);
 
   const availableVariants = resolutions.filter(r => inputHeight >= r.height);
@@ -111,7 +120,7 @@ const processVideo = async ({ inputPath, outputDir, fileNameWithoutExt }: Proces
     runFFmpeg(inputPath, outputDir, fileNameWithoutExt, res)
   )
 );
-const thumbnailPath = await createThumbnail(inputPath,outputDir)
+const thumbnailPath = await createThumbnail(inputPath,outputDir,newThumbnailPath)
 
   // Create master playlist
 const masterPlaylist =  createMasterPlaylist(outputDir, availableVariants);
@@ -120,7 +129,8 @@ const masterPlaylist =  createMasterPlaylist(outputDir, availableVariants);
   return {
     variants: availableVariants.map(r => `${r.height}p/index.m3u8`),
     masterPlaylist: masterPlaylist,
-    thumbnailPath
+    thumbnailPath,
+    videoFolderId: outputDir
   };
 };
 
