@@ -1,15 +1,13 @@
 import {Schema, model} from 'mongoose';
 
 export interface IComment extends Document {	
-    content: string;
+    comment: string;
     userId: Schema.Types.ObjectId; // Reference to UserModel
     videoId: Schema.Types.ObjectId; // Reference to VideoModel
-    likes?: number;
-    dislikes?: number;
 }
 
 const commentSchema = new Schema<IComment>({
-    content: {
+    comment: {
         type: String,
         required: true,
         trim: true,
@@ -25,14 +23,7 @@ const commentSchema = new Schema<IComment>({
         ref: "VideoModel",
         required: true,
     },
-    likes: {
-        type: Number,
-        default: 0,
-    },
-    dislikes: {
-        type: Number,
-        default: 0,
-    },
+   
 }, {
     timestamps: true,
 });

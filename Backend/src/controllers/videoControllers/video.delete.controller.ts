@@ -4,6 +4,7 @@ import { VideoModel } from "../../models";
 import fs from "fs";
 
 const videoDeleteController = async (req: Request, res: Response) => {
+    
     if (!req.params.videoId) {
         throw new ApiError("Video ID is required", 400, "Bad Request");
     }

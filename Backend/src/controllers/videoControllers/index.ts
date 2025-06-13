@@ -1,6 +1,6 @@
 import videoCreateController from "./video.create.controller";
 import videoGetController from "./video.get.controller";
-import videoGetAllController from "./video.getAll.controller";
+import videoGetAllController from "./video.get.all.controller";
 import videoUpdateController from "./video.update.controller";
 import videoDeleteController from "./video.delete.controller";
 
